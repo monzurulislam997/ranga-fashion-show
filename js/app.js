@@ -13,48 +13,45 @@ const showProducts = (products) => {
     const image = product.image;
     const div = document.createElement("div");
     div.classList.add("product");
+    
     div.innerHTML = `<div class="single-product">
       <div>
     <img class="product-image" src=${image}></img>
       </div>
-      <h3>${product.title}</h3>
+      <h4>${product.title.slice(0, 20)}</h4>
       <p>Category: ${product.category}</p>
-      <h2>Price: $ ${product.price}</h2>
+      <h6 class="my-cart">rating: ${product.rating.rate}   reviews:${product.rating.count}</h6>
+      <h3 class="title">price: $ ${product.price}</h3>
       <button onclick="addToCart(${product.id},${product.price})" id="addToCart-btn" class="buy-now btn btn-success">add to cart</button>
-      <button id="details-btn" class="btn btn-danger">Details</button></div>
+      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="modal()"  id="details-btn" class="btn btn-warning">Details</button></div>
       `;
+        
     document.getElementById("all-products").appendChild(div);
   }
 };
+
 let count =0;
 const addToCart = (id, price) => {
   count = count + 1;
   updatePrice("price",price);
-
-  //  console.log(price)
   updateTaxAndCharge();
   updateTotal();
   document.getElementById("total-Products").innerText = count;
 };
 
 const getInputValue = (id) => {
-  const element = document.getElementById(id).innerText;   //price ta oi double cotaion theke asshe index 58
-  // const converted = parseInt(element);
-  const converted = Math.round(Number(element).toFixed(2)); 
-  console.log(converted)
-  // console.log(converted)
+  const element = document.getElementById(id).innerText;  
+const converted = parseFloat(element);
   return converted;
 };
 
 // main price update function
 const updatePrice = (id, value) => {
   const convertedOldPrice = getInputValue(id);
-  // console.log(convertedOldPrice)
-  // const convertPrice = parseFloat(value);
-  const convertPrice = Number(value ).toFixed(2);
-  // console.log(convertPrice)
+    const convertPrice = parseFloat(value);
+
   const total = convertedOldPrice + convertPrice;
-  document.getElementById(id).innerText = Math.round(total);
+  document.getElementById(id).innerText =total.toFixed(2);
 };
 
 // set innerText function
@@ -65,7 +62,7 @@ const setInnerText = (id, value) => {
 // update delivery charge and total Tax
 const updateTaxAndCharge = () => {
   const priceConverted = getInputValue("price");
-  // console.log(priceConverted)
+
   if (priceConverted > 200) {
     setInnerText("delivery-charge", 30);
     setInnerText("total-tax", priceConverted * 0.2);
@@ -86,13 +83,6 @@ const updateTaxAndCharge = () => {
 const updateTotal = () => {
   let grandTotal = getInputValue("price") + getInputValue("delivery-charge") +
     getInputValue("total-tax");
-  document.getElementById("total").innerText = grandTotal;
-
-  // console.log(grandTotal)
+  document.getElementById("total").innerText = grandTotal.toFixed(2);
 };
 
-// const getInputValue = (id) => {
-//   const element = document.getElementById(id).innerText;   //price ta oi double cotaion theke asshe index 58
-//   const converted = parseInt(element);
-//   return converted;
-// };
